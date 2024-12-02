@@ -15,6 +15,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import java.util.List;
 /**
  * Modify this small program adding new filters.
  * Realize this exercise using as much as possible the Stream library.
@@ -38,7 +39,23 @@ public final class LambdaFilter extends JFrame {
         /**
          * Commands.
          */
-        IDENTITY("No modifications", Function.identity());
+        IDENTITY("No modifications", Function.identity()),
+        LOWER_CASE("Convert to lowercase", String::toLowerCase),
+        N_CHAR("Count the number of chars", a -> Integer.toString(a.length())),
+        N_LINES("Count the number of lines", a -> Integer.toString((int) a.lines().count())),
+        ORDERED_WORDS("List all the words in alphabetical order", a -> a.lines()
+                .flatMap(i -> List.of(i.split(" ")).stream())
+                .sorted()
+                .reduce((x, y) -> x.concat(" " + y)).orElse("")),
+        WORD_COUNT("Count for each word", a -> a.lines()
+                .flatMap(i -> List.of(i.split(" ")).stream())
+                .map(i -> i + " -> " + Integer.toString((int) a.lines()
+                    .flatMap(k -> List.of(k.split(" ")).stream())
+                    .filter(j -> j.equals(i))
+                    .count()))
+                .distinct()
+                .reduce((x, y) -> x.concat(" " + y)).orElse("")
+                );
 
         private final String commandName;
         private final Function<String, String> fun;
@@ -60,7 +77,7 @@ public final class LambdaFilter extends JFrame {
 
     private LambdaFilter() {
         super("Lambda filter GUI");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //NOPMD choose of the prof
         final JPanel panel1 = new JPanel();
         final LayoutManager layout = new BorderLayout();
         panel1.setLayout(layout);

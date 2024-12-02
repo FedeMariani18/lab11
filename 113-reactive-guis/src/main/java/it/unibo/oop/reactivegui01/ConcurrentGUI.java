@@ -1,6 +1,5 @@
 package it.unibo.oop.reactivegui01;
 
-
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.lang.reflect.InvocationTargetException;
@@ -54,7 +53,7 @@ public final class ConcurrentGUI extends JFrame {
      * The counter agent is implemented as a nested class. This makes it
      * invisible outside and encapsulated.
      */
-    private class Agent implements Runnable {
+    final private class Agent implements Runnable {
         /*
          * Stop is volatile to ensure visibility. Look at:
          * 
